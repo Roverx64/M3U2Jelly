@@ -47,7 +47,7 @@ will become
 ```
 #EXTM3U
 #PLAYLIST:Playlistname
-#EXTINF:176,Mili - Gunners in the Rain.flac
+#EXTINF:176,Mili - String Theocracy.flac
 /music/Mili/To Kill a Living Book/String Theocracy.flac
 ```
 The `/music/` before the Artist name `Mili` is the `NAVI` path you should pass to the program.  
