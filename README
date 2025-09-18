@@ -1,0 +1,75 @@
+# M3U2Jelly
+### About
+#### **NOTE: This program is only designed to work with linux. Windows may not be compatible or may cause errors**
+M3U2Jelly converts Navidrome's M3U to Jellyfin's xml format.  
+This is a simple side project with minimal error checking, there are sure to be some bugs lurking.  
+I made it after wanting an easy way to sync my navidrome playlists with Jellyfin.
+
+## Compiling
+Compilation is very easy using gcc.  
+**Note:** The `run.sh` script will compile this for you.
+
+`gcc ./src/main.c -o ./main.o -D_GNU_SOURCE`  
+
+`-D_GNU_SOURCE` is for access to `nftw`
+
+## Usage
+
+* CD to the same folder as `run.sh`
+* `chmod +x ./run.sh`
+* Execute `./run.sh [NAVI] [JELLY]` 
+
+Example: `./run.sh /music/ /mnt/Drive/Media/Music/`
+
+The created folders can be copied to you Jellyfin playlist directory.  
+Typically located at `.../Jellyfin/config/data/playlist` using docker.  
+
+---
+
+`NAVI` is the base path navidrome uses, I.E the `/music/` part of the path.  
+`JELLY` is the absolute path Jellyfin uses for your music
+
+You must check the paths yourself by reading your .m3u file in  a text editor and checking an existing Jellyfin XML.  
+At the bottom of the README, I show what to check for in the respective files.
+
+Example:   
+`/music/Mili/To Kill a Living Book/String Theocracy.flac`  
+The `/music/` will be replaced with Jellyfin's absolute music path.
+
+`/music/Mili/To Kill a Living Book/String Theocracy.flac`  
+will become  
+`/mnt/Drive/Media/Music/Mili/To Kill a Living Book/String Theocracy.flac`
+
+## Finding your paths
+
+### Navidrome/M3U
+
+```
+#EXTM3U
+#PLAYLIST:Playlistname
+#EXTINF:176,Mili - Gunners in the Rain.flac
+/music/Mili/To Kill a Living Book/String Theocracy.flac
+```
+The `/music/` before the Artist name `Mili` is the `NAVI` path you should pass to the program.  
+If there is more text before the Artist's name, include it in the passed argument.
+
+### Jellyfin
+
+```
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Item>
+  <Added>01/01/2025 00:00:00</Added>
+  <LockData>false</LockData>
+  <LocalTitle>Playlistname</LocalTitle>
+  <PlaylistItems>
+    <PlaylistItem>
+      <Path>/mnt/Drive/Media/Music/Mili/To Kill a Living Book/String Theocracy.flac</Path>
+    </PlaylistItem>
+  </PlaylistItems>
+  <Shares />
+  <PlaylistMediaType>Audio</PlaylistMediaType>
+</Item>
+```
+
+The `/mnt/Drive/Media/Music/` before the Artist name `Mili` is the `JELLY` path you should pass to the program.  
+You may also be able to find your Jellyfin music folder via the Jellyfin dashboard.
