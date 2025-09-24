@@ -56,11 +56,26 @@ void writeXmlHeader(FILE *xml, char *plName){
 void writePath(FILE *xml, char *path){
     size_t len = strlen(path);
     for(size_t i = 0; i < len; ++i){
-        if(path[i] == '&'){
+        switch(path[i]){
+            case '&':
             fprintf(xml,"&amp;");
-            continue;
+            break;
+            case '<':
+            fprintf(xml,"&lt;");
+            break;
+            case '>':
+            fprintf(xml,"&gt;");
+            break;
+            case '"':
+            fprintf(xml,"&quot;");
+            break;
+            case '\'':
+            fprintf(xml,"&apos;");
+            break;
+            default:
+            fputc(path[i],xml);
+            break;
         }
-        fputc(path[i],xml);
     }
 }
 
